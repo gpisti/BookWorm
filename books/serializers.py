@@ -30,13 +30,21 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class UserBookSerializer(serializers.ModelSerializer):
-    book = BookSerializer(read_only=True) 
+    book = BookSerializer(read_only=True)
+    book_id = serializers.PrimaryKeyRelatedField(
+        queryset=None,
+        source='book',
+        write_only=True,
+        required=False
+    )
 
     class Meta:
         model = UserBook
-        fields = ['id', 'book', 'status', 'rating', 'private_notes']
+        fields = ['id', 'book', 'book_id', 'status', 'rating', 'private_notes']
 
-class UserBookCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserBook
-        fields = ['book', 'status']
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from .models import Book
+        self.fields['book_id'].queryset = Book.objects.all()
+        if self.instance is None:
+            self.fields['book_id'].required = True

@@ -1,10 +1,9 @@
 from rest_framework import generics, permissions, viewsets
 from django.contrib.auth.models import User
-from .models import UserBook
+from .models import UserBook, Book, Author
 from .serializers import (
     RegisterSerializer, 
-    UserBookSerializer, 
-    UserBookCreateSerializer
+    UserBookSerializer
 )
 import requests
 from rest_framework.decorators import api_view, permission_classes
@@ -20,11 +19,7 @@ class RegisterView(generics.CreateAPIView):
 
 class UserBookViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
-
-    def get_serializer_class(self):
-        if self.action == 'create' or self.action == 'update':
-            return UserBookCreateSerializer
-        return UserBookSerializer
+    serializer_class = UserBookSerializer
 
     def get_queryset(self):
         return UserBook.objects.filter(user=self.request.user)
@@ -51,13 +46,36 @@ def search_book_by_isbn(request):
         data = response.json()
         
         book_data_key = f'ISBN:{isbn}'
-        if book_data_key in data:
-            return Response(data[book_data_key], status=status.HTTP_200_OK)
-        else:
+        if book_data_key not in data:
             return Response(
                 {"error": "A könyv nem található ezzel az ISBN számmal."}, 
                 status=status.HTTP_404_NOT_FOUND
             )
+        
+        book_info = data[book_data_key]
+        
+        book, created = Book.objects.get_or_create(
+            isbn=isbn,
+            defaults={
+                'title': book_info.get('title', 'Ismeretlen cím'),
+                'publication_year': book_info.get('publish_date', '').split('-')[0] if book_info.get('publish_date') else None,
+                'cover_image_url': book_info.get('cover', {}).get('large') or book_info.get('cover', {}).get('medium') or book_info.get('cover', {}).get('small') or None
+            }
+        )
+        
+        if book_info.get('authors'):
+            for author_info in book_info['authors']:
+                author_name = author_info.get('name', '')
+                if author_name:
+                    author, _ = Author.objects.get_or_create(name=author_name)
+                    book.authors.add(author)
+        
+        from .serializers import BookSerializer
+        serializer = BookSerializer(book)
+        return Response({
+            'book': serializer.data,
+            'created': created
+        }, status=status.HTTP_200_OK)
             
     except requests.RequestException as e:
         return Response(
