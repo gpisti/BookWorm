@@ -32,7 +32,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UserBookSerializer(serializers.ModelSerializer):
     book = BookSerializer(read_only=True)
     book_id = serializers.PrimaryKeyRelatedField(
-        queryset=None,
+        queryset=Book.objects.all(),
         source='book',
         write_only=True,
         required=False
@@ -44,7 +44,5 @@ class UserBookSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        from .models import Book
-        self.fields['book_id'].queryset = Book.objects.all()
         if self.instance is None:
             self.fields['book_id'].required = True
