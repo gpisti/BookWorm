@@ -1,0 +1,272 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+:root {
+    --font-pixel: 'Press+Start+2P', 'VT323', monospace;
+    --font-body: 'VT323', monospace;
+    
+    --color-bg: #a4c8e3;
+    --color-text: #333333;
+    --color-border: #555555;
+    --color-accent: #5a8fcd;
+    --color-card-bg: #f8f8f0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg); 
+  background-image: linear-gradient(
+      to bottom,
+      var(--color-bg) 0%,
+      #cbe1f0 100%
+  );
+  background-repeat: no-repeat;
+  min-height: 100vh;
+
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 24px;
+  margin: 0;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+
+  background-image: linear-gradient(45deg, rgba(0,0,0,0.05) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.05) 75%),
+                    linear-gradient(-45deg, rgba(0,0,0,0.05) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.05) 75%);
+  background-size: 4px 4px;
+}
+
+h1, h2, h3, h4, h5, h6, button {
+    font-family: var(--font-pixel);
+    color: var(--color-accent);
+}
+
+a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: 10px;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 10;
+}
+header h1 a {
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.pixel-form {
+    border: 2px solid var(--color-border);
+    padding: 20px;
+    background-color: var(--color-card-bg);
+    margin-bottom: 40px;
+    max-width: 500px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.pixel-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: var(--color-text);
+}
+
+.pixel-form input[type="text"],
+.pixel-form input[type="password"],
+.pixel-form input[type="email"] {
+    background-color: #fff;
+    border: 2px solid var(--color-border);
+    color: var(--color-text);
+    padding: 10px;
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+}
+
+.pixel-form input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+button {
+    background-color: var(--color-accent);
+    color: var(--color-card-bg);
+    border: 2px solid var(--color-accent);
+    padding: 10px 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+button:hover {
+    background-color: var(--color-card-bg);
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.pixel-border {
+    border: 2px solid var(--color-border);
+    padding: 20px;
+    background-color: var(--color-card-bg);
+}
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.book-card {
+    background-color: var(--color-card-bg);
+    border: 2px solid var(--color-border);
+    padding: 15px;
+}
+
+.book-card h3 {
+    font-size: 1rem;
+    margin: 10px 0 5px 0;
+    line-height: 1.2;
+}
+.book-card h4 {
+    font-size: 0.8rem;
+    color: var(--color-text);
+    margin: 0 0 10px 0;
+    font-family: var(--font-body);
+    font-weight: normal;
+}
+
+.book-card img {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    display: block;
+    
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+
+    border: 2px solid var(--color-border);
+}
+
+
+
+.background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+@keyframes fly {
+    from {
+        transform: translateX(100vw);
+    }
+    to {
+        transform: translateX(-250px);
+    }
+}
+
+.cloud {
+    position: absolute;
+    animation-name: fly;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.9;
+    z-index: -3;
+}
+
+
+.cloud-1 {
+    width: 420px;
+    height: 210px; 
+    top: 8%;
+    animation-duration: 30s;
+    animation-delay: -5s;
+}
+
+.cloud-2 {
+    width: 560px;
+    height: 280px;
+    top: 20%;
+    animation-duration: 20s;
+}
+
+.cloud-3 {
+    width: 336px;
+    height: 168px;
+    top: 35%;
+    animation-duration: 25s;
+    animation-delay: -10s;
+}
+
+.cloud-4 {
+    width: 504px;
+    height: 252px;
+    top: 50%;
+    animation-duration: 35s;
+}
+
+.cloud-5 {
+    width: 280px;
+    height: 140px;
+    top: 68%;
+    animation-duration: 22s;
+    animation-delay: -15s;
+}
+
+.cloud-6 {
+    width: 616px;
+    height: 308px;
+    top: 12%;
+    animation-duration: 28s;
+    animation-delay: -8s;
+}
+
+.landscape-bg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 375px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    z-index: -2;
+}
